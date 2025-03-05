@@ -1,66 +1,327 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Agile Tracker
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## 🚀 Project Overview
 
-## About Laravel
+This Laravel-based RESTful API provides comprehensive project management functionality, including:
+- User Authentication
+- Project Management
+- Timesheet Tracking
+- Dynamic Attribute Management (Entity-Attribute-Value Model)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 📋 Table of Contents
+- [Setup Instructions](#-setup-instructions)
+- [Authentication](#-authentication)
+- [API Endpoints](#-api-endpoints)
+  - [Projects](#projects)
+  - [Timesheets](#timesheets)
+  - [Attributes](#attributes)
+  - [Attribute Values](#attribute-values)
+- [Filtering](#-filtering)
+- [Testing](#-testing)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 📦 Requirements
+- Laravel Herd
+- PHP 8.1+
+- PostgreSQL
+- Composer
+- Laravel Passport
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 🛠 Setup Instructions
 
-## Learning Laravel
+### 1. Clone the Repository in Herd Folder
+```bash
+# Navigate to Herd directory
+cd ~/Herd
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+# Clone the repository
+git clone https://your-repository-url.git
+cd Agile-Tracker
+```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### 2. Install Dependencies
+```bash
+composer install
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 3. Environment Configuration
+1. Copy the example environment file:
+```bash
+cp .env.example .env
+```
 
-## Laravel Sponsors
+2. Update Database Credentials:
+   - Open `.env` file and update database settings:
+   ```ini
+   DB_CONNECTION=pgsql
+   DB_HOST=127.0.0.1
+   DB_PORT=5432
+   DB_DATABASE=your_database_name
+   DB_USERNAME=your_database_username
+   DB_PASSWORD=your_database_password
+   ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+3. Optional: Update PostgreSQL Configuration
+   - Open `config/database.php`
+   - Locate the `pgsql` section
+   - Modify credentials to match your PostgreSQL setup
 
-### Premium Partners
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+### 4. Setup Database and Authentication
+```bash
+# Run migrations
+php artisan migrate
 
-## Contributing
+# Generate passport client for application
+php artisan passport:client --personal
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# Seed initial data 
+php artisan db:seed
+```
 
-## Code of Conduct
+### 5. Start Development Server
+```bash
+php artisan serve
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Additional Notes
+- Ensure PostgreSQL service is running
+- Verify all dependencies are correctly installed
+- Check `.env` file permissions
+- Recommended: Run `php artisan key:generate` to set application key
 
-## Security Vulnerabilities
+## 🔐 Authentication Endpoints
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 1. User Registration
+- **Endpoint:** `POST /api/register`
+- **Purpose:** Create a new user account
 
-## License
+#### Request Body
+```json
+{
+  "first_name": "John",
+  "last_name": "Cena",
+  "email": "john@gmail.com",
+  "password": "secure_password",
+  "password_confirmation": "secure_password"
+}
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+#### Successful Response
+```json
+{
+  "message": "User registered successfully",
+  "token": "access_token_here"
+}
+```
+
+### 2. User Login
+- **Endpoint:** `POST /api/login`
+- **Purpose:** Authenticate user and receive access token
+
+#### Request Body
+```json
+{
+  "email": "john@gmail.com",
+  "password": "secure_password"
+}
+```
+
+#### Successful Response
+```json
+{
+  "token": "access_token_here"
+}
+```
+
+### 3. User Logout
+- **Endpoint:** `POST /api/logout`
+- **Purpose:** Invalidate user's current access token
+- **Required Header:** `Authorization: Bearer {access_token}`
+
+#### Successful Response
+```json
+{
+  "message": "Logged out successfully"
+}
+```
+
+## 📊 API Endpoints
+
+### Projects
+
+#### 1. List All Projects
+- **Endpoint:** `GET /api/projects`
+- **Required Header:** `Authorization: Bearer {access_token}`
+- **Purpose:** Retrieve all projects
+
+#### 2. Get Single Project
+- **Endpoint:** `GET /api/projects/{id}`
+- **Required Header:** `Authorization: Bearer {access_token}`
+- **Purpose:** Retrieve details of a specific project
+
+#### 3. Create Project
+- **Endpoint:** `POST /api/projects`
+- **Required Header:** `Authorization: Bearer {access_token}`
+
+##### Request Body
+```json
+{
+  "name": "Web Development Project",
+  "status": "in_progress",
+}
+```
+
+#### 4. Update Project
+- **Endpoint:** `PUT /api/projects/{id}`
+- **Required Header:** `Authorization: Bearer {access_token}`
+
+##### Request Body
+```json
+{
+  "name": "Updated Project Name",
+  "status": "completed"
+}
+```
+
+#### 5. Delete Project
+- **Endpoint:** `DELETE /api/projects/{id}`
+- **Required Header:** `Authorization: Bearer {access_token}`
+
+### Timesheets
+
+#### 1. List All Timesheets
+- **Endpoint:** `GET /api/timesheets`
+- **Required Header:** `Authorization: Bearer {access_token}`
+- **Purpose:** Retrieve all timesheet entries
+
+#### 2. Get Single Timesheet
+- **Endpoint:** `GET /api/timesheets/{id}`
+- **Required Header:** `Authorization: Bearer {access_token}`
+- **Purpose:** Retrieve details of a specific timesheet entry
+
+#### 3. Create Timesheet Entry
+- **Endpoint:** `POST /api/timesheets`
+- **Required Header:** `Authorization: Bearer {access_token}`
+
+##### Request Body
+```json
+{
+  "task_name": "Frontend Development",
+  "date": "2024-03-15",
+  "hours": 6.5,
+  "project_id": "10ce093e-fddd-4607-a2fe-ba1679de6211",
+}
+```
+
+#### 4. Update Timesheet Entry
+- **Endpoint:** `PUT /api/timesheets/{id}`
+- **Required Header:** `Authorization: Bearer {access_token}`
+
+##### Request Body
+```json
+{
+  "hours": 5.0,
+}
+```
+
+#### 5. Delete Timesheet Entry
+- **Endpoint:** `DELETE /api/timesheets/{id}`
+- **Required Header:** `Authorization: Bearer {access_token}`
+
+### Attributes
+
+#### 1. List All Attributes
+- **Endpoint:** `GET /api/attributes`
+- **Required Header:** `Authorization: Bearer {access_token}`
+- **Purpose:** Retrieve all custom attributes
+
+#### 2. Get Single Attributes
+- **Endpoint:** `GET /api/timesheets/{id}`
+- **Required Header:** `Authorization: Bearer {access_token}`
+- **Purpose:** Retrieve details of a specific attributes entry
+
+#### 3. Create Attribute
+- **Endpoint:** `POST /api/attributes`
+- **Required Header:** `Authorization: Bearer {access_token}`
+
+##### Request Body
+```json
+{
+  "name": "Project Priority",
+  "type": "text",
+}
+```
+
+#### 4. Update Attribute
+- **Endpoint:** `PUT /api/attributes/{id}`
+- **Required Header:** `Authorization: Bearer {access_token}`
+
+#### 5. Delete Attribute
+- **Endpoint:** `DELETE /api/attributes/{id}`
+- **Required Header:** `Authorization: Bearer {access_token}`
+
+### Attribute Values
+
+#### 1. List Attribute Values
+- **Endpoint:** `GET /api/attribute-values`
+- **Purpose:** Retrieve all attribute values
+
+#### 2. Create Attribute Value
+- **Endpoint:** `POST /api/attribute-values`
+- **Required Header:** `Authorization: Bearer {access_token}`
+
+##### Request Body
+```json
+{
+  "attribute_id": "10ce093e-fddd-4607-a2fe-ba1679de6211",
+  "entity_id": "10ce093e-fddd-4607-a2fe-ba1679de6211",
+  "value": "High Priority",
+  "entity_type": "project"
+}
+```
+
+#### 3. Update Attribute Value
+- **Endpoint:** `PUT /api/attribute-values/{id}`
+- **Required Header:** `Authorization: Bearer {access_token}`
+
+#### 4. Delete Attribute Value
+- **Endpoint:** `DELETE /api/attribute-values/{id}`
+- **Required Header:** `Authorization: Bearer {access_token}`
+
+## 🔍 Advanced Filtering
+
+### Query Parameter Filtering
+Endpoint supports flexible filtering using query parameters:
+
+```
+GET /api/projects?filters[name]=WebProject&filters[status]=in_progress
+GET /api/timesheets?filters[hours]=>5&filters[date]=2024-03-15
+```
+
+Supported Operators:
+- `=`: Exact match
+- `>`: Greater than
+- `<`: Less than
+- `LIKE`: Partial text match
+
+## 🧪 Test Credentials
+
+For initial testing, use:
+- **Email:** `john.doe@example.com`
+- **Password:** `password123`
+
+## 🔒 Security Notes
+- Always use HTTPS in production
+- Keep access tokens confidential
+- Implement proper rate limiting
+- Regularly update dependencies
+
+## Troubleshooting
+- If you encounter dependency issues, run `composer update`
+- For Passport setup problems, try `php artisan passport:install`
+- Verify PHP extensions are enabled in your `php.ini`
+
+## 🔍 Recommended Development Tools
+- Postman or Insomnia for API testing
+- PostgreSQL management tool (DBeaver, pgAdmin)
+- Visual Studio Code or PhpStorm
